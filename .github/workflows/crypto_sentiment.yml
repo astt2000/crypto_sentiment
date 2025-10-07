@@ -1,0 +1,29 @@
+name: Crypto Sentiment Alert
+
+on:
+  schedule:
+    # Run daily at 7:00 AM, 1:00 PM, and 9:30 PM Malaysia time (UTC+8)
+    - cron: "0 23 * * *"     # 7:00 AM MYT (previous day UTC)
+    - cron: "0 5 * * *"      # 1:00 PM MYT
+    - cron: "30 13 * * *"    # 9:30 PM MYT
+  workflow_dispatch:          # allow manual trigger
+
+jobs:
+  run-sentiment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: Run crypto sentiment alert
+        run: |
+          python crypto_sentiment.py
